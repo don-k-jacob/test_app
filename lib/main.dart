@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:test_app/home/home.dart';
 import 'package:test_app/login/login.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -16,13 +17,7 @@ void main() async {
   //     measurementId: "G-65ST1W4N9D");
   await Firebase.initializeApp();
   // await FirebaseAuth.instance.useAuthEmulator('localhost', 9099);  // auth.useEmulator('http://127.0.0.1:9099');
-  FirebaseAuth.instance.authStateChanges().listen((User? user) {
-    if (user == null) {
-      print('User is currently signed out!');
-    } else {
-      print('User is signed in!');
-    }
-  });
+
   runApp(const MyApp());
 }
 
@@ -32,9 +27,19 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    bool isLogin = false;
+    FirebaseAuth.instance.authStateChanges().listen((User? user) {
+      if (user == null) {
+        print('User is currently signed out!');
+        isLogin = false;
+      } else {
+        print('User is signed in!');
+        isLogin = true;
+      }
+    });
     return MaterialApp(
       theme: ThemeData(primarySwatch: Colors.grey),
-      home: Login(),
+      home: isLogin ? Login() : HomePage(),
     );
   }
 }

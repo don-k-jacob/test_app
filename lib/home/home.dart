@@ -1,7 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
+import 'package:test_app/model/book_model.dart';
+import 'package:test_app/services/books_repo.dart';
 import 'package:test_app/util.dart';
+import '';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -37,17 +41,25 @@ class CurvePainter extends CustomPainter {
 }
 
 class _HomePageState extends State<HomePage> {
+  List<BookModel> books = [];
+  @override
+  void initState() async {
+    books = await BookRepo().getBooks();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
 
     return Scaffold(
-      bottomNavigationBar: Container(
-        // decoration: ,
-        child: CustomPaint(
-          painter: CurvePainter(),
-        ),
-      ),
+      // bottomNavigationBar: Container(
+      //   // decoration: ,
+      //   height: 500,
+      //   child: CustomPaint(
+      //     painter: CurvePainter(),
+      //   ),
+      // ),
       body: SafeArea(
         child: Column(children: [
           verticalspacer(25),
@@ -127,10 +139,11 @@ class _HomePageState extends State<HomePage> {
             height: 280,
             child: ListView.builder(
                 shrinkWrap: true,
-                itemCount: 5,
+                itemCount: books.length,
                 scrollDirection: Axis.horizontal,
                 padding: EdgeInsets.only(left: 12),
                 itemBuilder: (BuildContext context, int index) {
+                  BookModel book = books[index];
                   return Padding(
                     padding: const EdgeInsets.all(12),
                     child: SizedBox(
@@ -143,13 +156,15 @@ class _HomePageState extends State<HomePage> {
                               height: 197,
                               width: 130,
                               decoration: BoxDecoration(
-                                color: Color(0xff211B1B),
-                                borderRadius: BorderRadius.circular(6),
-                              ),
+                                  color: Color(0xff211B1B),
+                                  borderRadius: BorderRadius.circular(6),
+                                  image: DecorationImage(
+                                      image: NetworkImage(book.url ??
+                                          "https://firebasestorage.googleapis.com/v0/b/bookstore-b425c.appspot.com/o/book4.png?alt=media&token=75e1ab64-7824-4e10-af3c-664bb03f7fa4"))),
                             ),
                             verticalspacer(18),
                             Text(
-                              "Muscle",
+                              book.name,
                               style: TextStyle(
                                 color: Color(0xff0F0F10),
                                 fontWeight: FontWeight.bold,
@@ -158,7 +173,7 @@ class _HomePageState extends State<HomePage> {
                             ),
                             verticalspacer(6),
                             Text(
-                              "Alan Trotter",
+                              book.author,
                               style: TextStyle(
                                 color: Color(0xff9D9EA8),
                                 fontWeight: FontWeight.normal,
