@@ -117,12 +117,16 @@ class _HomePageState extends State<HomePage> {
                     ),
                     Spacer(),
                     Container(
+                      height: 70,
+                      width: 47,
                       decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          image: DecorationImage(
-                              image: NetworkImage(
+                        borderRadius: BorderRadius.circular(10),
+                        image: DecorationImage(
+                          image: NetworkImage(
                             "https://firebasestorage.googleapis.com/v0/b/bookstore-b425c.appspot.com/o/book4.png?alt=media&token=75e1ab64-7824-4e10-af3c-664bb03f7fa4",
-                          ))),
+                          ),
+                        ),
+                      ),
                     )
                   ],
                 ),
